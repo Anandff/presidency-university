@@ -4338,3 +4338,72 @@ footer { border-top:1px solid var(--border); padding:18px 2px 8px; display:flex;
     min-height: 400px;
   }
 }
+/* =========================================
+   CAMPUS TOUR STATS
+========================================= */
+
+.campus-tour-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.campus-tour-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.campus-tour-stat-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 9px;
+}
+
+.campus-tour-stat-icon.purple {
+  color: #8879ff;
+  background: rgba(136,121,255,.1);
+}
+
+.campus-tour-stat-icon.blue {
+  color: #5c9aff;
+  background: rgba(92,154,255,.1);
+}
+
+.campus-tour-stat-icon.green {
+  color: #35c78a;
+  background: rgba(53,199,138,.1);
+}
+
+.campus-tour-stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 6px;
+  font-weight: 800;
+}
+
+.campus-tour-stat strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 8px;
+}
+
+@media (max-width: 650px) {
+  .campus-tour-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .campus-tour-stat {
+    padding: 10px;
+  }
+}

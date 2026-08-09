@@ -1,4 +1,4 @@
-import { Maximize2, VolumeX } from "lucide-react";
+import { Maximize2, Map, Navigation, VolumeX } from "lucide-react";
 
 export default function CampusMap() {
   return (
@@ -28,6 +28,41 @@ export default function CampusMap() {
             <Maximize2 size={13} />
             Fullscreen
           </button>
+        </div>
+      </div>
+
+      <div className="campus-tour-stats">
+        <div className="campus-tour-stat">
+          <div className="campus-tour-stat-icon purple">
+            <Map size={16} />
+          </div>
+
+          <div>
+            <span>TOUR TYPE</span>
+            <strong>Virtual Campus</strong>
+          </div>
+        </div>
+
+        <div className="campus-tour-stat">
+          <div className="campus-tour-stat-icon blue">
+            <Navigation size={16} />
+          </div>
+
+          <div>
+            <span>EXPERIENCE</span>
+            <strong>Interactive View</strong>
+          </div>
+        </div>
+
+        <div className="campus-tour-stat">
+          <div className="campus-tour-stat-icon green">
+            <VolumeX size={16} />
+          </div>
+
+          <div>
+            <span>AUDIO</span>
+            <strong>Disabled</strong>
+          </div>
         </div>
       </div>
 
