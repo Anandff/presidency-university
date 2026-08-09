@@ -99,10 +99,14 @@ function App() {
     <div className={dark ? "app dark" : "app"}>
       <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="brand">
-          <div className="brand-mark">P</div>
+          <div className="brand-mark"><img
+  src="https://e7.pngegg.com/pngimages/286/102/png-clipart-presidency-college-bangalore-presidency-university-bangalore-bangalore-university-p-e-s-institute-of-technology-bangalore-south-campus-school-text-logo.png" height="40" width="40"
+  alt="PU"
+  className="brand-logo-image"
+/></div>
           <div>
             <strong>Presidency</strong>
-            <span>Connect</span>
+            <span>OS</span>
           </div>
           <button className="mobile-close" onClick={() => setSidebarOpen(false)}><X size={20}/></button>
         </div>
@@ -328,7 +332,7 @@ function App() {
           </section>
 
           <footer>
-            <span>Presidency Connect</span>
+            <span>Presidency OS</span>
             <span>Student digital campus • v0.1.0</span>
           </footer>
             </>

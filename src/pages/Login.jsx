@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 const DEMO_USERS = {
-  "student@anand.com": { password: "anand123", role: "Student" },
+  "anand@a.com": { password: "anand123", role: "Student" },
   "faculty@test.com": { password: "password123", role: "Faculty" },
   "admin@test.com": { password: "password123", role: "Admin" }
 };
@@ -45,7 +45,11 @@ export default function Login({ onLogin }) {
 
       <div className="login-shell">
         <div className="login-brand">
-          <div className="login-logo">P</div>
+          <div className="login-logo"><img
+  src="https://e7.pngegg.com/pngimages/286/102/png-clipart-presidency-college-bangalore-presidency-university-bangalore-bangalore-university-p-e-s-institute-of-technology-bangalore-south-campus-school-text-logo.png" height="40" width="40"
+  alt="Presidency OS"
+  className="login-logo-image"
+/></div>
           <div>
             <strong>Presidency</strong>
             <span>OS</span>
@@ -143,7 +147,7 @@ export default function Login({ onLogin }) {
         </div>
 
         <div className="login-footer">
-          <span>Presidency Connect</span>
+          <span>Presidency OS</span>
           <span>Secure digital campus</span>
         </div>
       </div>
