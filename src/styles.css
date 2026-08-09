@@ -3952,3 +3952,389 @@ footer { border-top:1px solid var(--border); padding:18px 2px 8px; display:flex;
   border-radius: 20%;
   display: block;
 }
+/* =========================================
+   RESOURCES
+========================================= */
+
+.resource-search {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 17px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.resource-search svg {
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+.resource-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 8px;
+}
+
+.resource-search input::placeholder {
+  color: var(--muted);
+}
+
+.resources-card {
+  padding: 20px;
+  margin-bottom: 17px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 11px;
+}
+
+.resource-course {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.resource-course:hover {
+  transform: translateY(-2px);
+  border-color: rgba(136,121,255,.3);
+}
+
+.resource-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 13px;
+  border-radius: 9px;
+}
+
+.resource-icon.purple {
+  color: #9b88ff;
+  background: rgba(155,136,255,.1);
+}
+
+.resource-icon.blue {
+  color: #5c9aff;
+  background: rgba(92,154,255,.1);
+}
+
+.resource-icon.green {
+  color: #35c78a;
+  background: rgba(53,199,138,.1);
+}
+
+.resource-icon.orange {
+  color: #f5a94f;
+  background: rgba(245,169,79,.1);
+}
+
+.resource-type {
+  color: var(--muted);
+  font-size: 6px;
+  font-weight: 800;
+}
+
+.resource-course h3 {
+  margin: 5px 0 0;
+  font: 700 10px Manrope;
+  line-height: 1.35;
+}
+
+.resource-course p {
+  min-height: 31px;
+  margin: 7px 0 12px;
+  color: var(--muted);
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.resource-course-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.resource-course-footer > span {
+  color: var(--muted);
+  font-size: 7px;
+}
+
+.resource-course-footer button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--accent-2);
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.recent-resources {
+  margin-bottom: 17px;
+}
+
+.resource-file-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 9px 5px;
+  border-top: 1px solid var(--border);
+}
+
+.resource-file-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 8px;
+  color: var(--accent-2);
+  background: rgba(136,121,255,.08);
+}
+
+.resource-file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.resource-file-info strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 8px;
+}
+
+.resource-file-info span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 6px;
+}
+
+.resource-file-date {
+  color: var(--muted);
+  font-size: 7px;
+}
+
+.resource-download {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.resource-download:hover {
+  color: var(--accent-2);
+  background: rgba(136,121,255,.07);
+}
+
+.resource-help-banner {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.resource-help-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  border-radius: 9px;
+  color: #5c9aff;
+  background: rgba(92,154,255,.09);
+}
+
+.resource-help-banner > div:nth-child(2) {
+  flex: 1;
+}
+
+.resource-help-banner strong {
+  display: block;
+  font-size: 9px;
+}
+
+.resource-help-banner p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 7px;
+}
+
+.resource-help-banner button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--accent-2);
+  font-size: 7px;
+  font-weight: 700;
+}
+
+@media (max-width: 1000px) {
+  .resource-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resources-card {
+    padding: 14px;
+  }
+
+  .resource-file-date {
+    display: none;
+  }
+
+  .resource-help-banner button {
+    display: none;
+  }
+}
+/* =========================================
+   PRESIDENCY VIRTUAL CAMPUS TOUR
+========================================= */
+
+.campus-tour-page {
+  min-width: 0;
+}
+
+.campus-tour-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.campus-tour-controls span,
+.campus-tour-controls button {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.campus-tour-controls button {
+  color: var(--accent-2);
+  cursor: pointer;
+}
+
+.campus-tour-controls button:hover {
+  background: rgba(136,121,255,.07);
+}
+
+.campus-tour-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.campus-tour-header {
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 17px;
+  border-bottom: 1px solid var(--border);
+}
+
+.campus-tour-header h2 {
+  margin: 3px 0 0;
+  font: 700 13px Manrope;
+}
+
+.campus-tour-badge {
+  padding: 5px 8px;
+  border: 1px solid rgba(53,199,138,.18);
+  border-radius: 6px;
+  background: rgba(53,199,138,.07);
+  color: #35c78a;
+  font-size: 6px;
+  font-weight: 800;
+}
+
+.campus-tour-frame {
+  position: relative;
+  width: 100%;
+  height: min(70vh, 680px);
+  min-height: 480px;
+  background: #08080c;
+}
+
+.campus-tour-frame iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .campus-tour-controls span {
+    display: none;
+  }
+
+  .campus-tour-header {
+    padding: 12px;
+  }
+
+  .campus-tour-frame {
+    height: 70vh;
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 450px) {
+  .campus-tour-header h2 {
+    font-size: 11px;
+  }
+
+  .campus-tour-frame {
+    height: 75vh;
+    min-height: 400px;
+  }
+}

@@ -11,6 +11,8 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import SettingsPage from "./pages/SettingsPage";
 import Events from "./pages/Events";
+import Resources from "./pages/Resources";
+import CampusMap from "./pages/CampusMap";
 import {
   Bell, CalendarDays, ChevronRight, Clock3, FileText, GraduationCap,
   Home, LayoutDashboard, MapPin, Menu, MessageSquare, Moon, Search,
@@ -221,6 +223,10 @@ function App() {
   <SettingsPage dark={dark} setDark={setDark} />
 ) : active === "Events" ? (
   <Events />
+) : active === "Resources" ? (
+  <Resources />
+) : active === "Campus Map" ? (
+  <CampusMap />
 ) : (
   <>
           <div className="hero">
