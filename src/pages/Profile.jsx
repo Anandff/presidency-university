@@ -1,8 +1,8 @@
-import React from "react";
 import {
-  Camera,
-  Check,
-  ChevronRight,
+  ArrowLeft,
+  BadgeCheck,
+  BookOpen,
+  CalendarDays,
   Edit3,
   GraduationCap,
   Mail,
@@ -12,174 +12,237 @@ import {
   UserRound
 } from "lucide-react";
 
-export default function Profile() {
+export default function Profile({ user, onBack }) {
   return (
-    <div className="page-content">
+    <div className="page-content profile-page">
+
       <div className="page-heading">
         <div>
-          <span className="panel-kicker">ACCOUNT</span>
+          <span className="panel-kicker">STUDENT ACCOUNT</span>
           <h1>My Profile</h1>
           <p>
-            Manage your student information and account preferences.
+            Manage your personal information and university profile.
           </p>
         </div>
 
-        <button className="profile-save-button">
-          <Check size={14} />
-          Save changes
+        <button className="profile-back-button" onClick={onBack}>
+          <ArrowLeft size={14} />
+          Back to dashboard
         </button>
       </div>
 
-      <div className="profile-layout">
-        <aside className="profile-sidebar">
-          <div className="profile-avatar-large">
-            AK
-            <button>
-              <Camera size={12} />
-            </button>
+      <section className="profile-hero">
+        <div className="profile-avatar-large">
+          AK
+        </div>
+
+        <div className="profile-identity">
+          <div className="profile-name-row">
+            <h2>
+              {user?.name || "Anand Kumar Bhargav"}
+            </h2>
+
+            <span className="verified-badge">
+              <BadgeCheck size={12} />
+              Verified
+            </span>
           </div>
 
-          <h2>Anand Kumar</h2>
-          <span className="profile-role">Student</span>
+          <p>
+            {user?.role || "Student"} • Presidency University
+          </p>
 
-          <div className="profile-id">
-            <span>STUDENT ID</span>
-            <strong>20261BCA0157</strong>
+          <div className="profile-meta">
+            <span>
+              <GraduationCap size={13} />
+              B.Tech
+            </span>
+
+            <span>
+              <BookOpen size={13} />
+              BCA in Cyber Security
+            </span>
+
+            <span>
+              <CalendarDays size={13} />
+              1st Year
+            </span>
+          </div>
+        </div>
+
+        <button className="profile-edit-button">
+          <Edit3 size={13} />
+          Edit profile
+        </button>
+      </section>
+
+      <div className="profile-grid">
+
+        <section className="panel profile-panel">
+          <div className="panel-head">
+            <div>
+              <span className="panel-kicker">PERSONAL INFORMATION</span>
+              <h2>Basic details</h2>
+            </div>
+
+            <UserRound size={17} />
           </div>
 
-          <div className="profile-sidebar-line" />
+          <div className="profile-details">
 
-          <div className="profile-status">
-            <span className="status-dot" />
-            Active student
+            <ProfileDetail
+              icon={<UserRound size={14} />}
+              label="Full name"
+              value={user?.name || "Anand Kumar Bhargav"}
+            />
+
+            <ProfileDetail
+              icon={<BadgeCheck size={14} />}
+              label="University ID"
+              value="20261BCA0157"
+            />
+
+            <ProfileDetail
+              icon={<Mail size={14} />}
+              label="University email"
+              value="ANAND.20261BCA0157@presidencyuniversity.in"
+            />
+
+            <ProfileDetail
+              icon={<Phone size={14} />}
+              label="Phone number"
+              value="+91 7542942011"
+            />
+
+            <ProfileDetail
+              icon={<MapPin size={14} />}
+              label="Campus"
+              value="Presidency University"
+            />
+
+            <ProfileDetail
+              icon={<GraduationCap size={14} />}
+              label="Program"
+              value="BCA in Cyber Security"
+            />
+
           </div>
-        </aside>
+        </section>
 
-        <main className="profile-main">
-          <section className="profile-section">
-            <div className="section-title">
-              <div>
-                <span className="panel-kicker">PERSONAL INFORMATION</span>
-                <h2>Basic details</h2>
-              </div>
-
-              <button className="profile-edit">
-                <Edit3 size={13} />
-                Edit
-              </button>
+        <section className="panel profile-panel">
+          <div className="panel-head">
+            <div>
+              <span className="panel-kicker">ACADEMIC INFORMATION</span>
+              <h2>Academic overview</h2>
             </div>
 
-            <div className="profile-fields">
-              <ProfileField
-                icon={<UserRound />}
-                label="Full name"
-                value="Anand Kumar"
-              />
+            <GraduationCap size={17} />
+          </div>
 
-              <ProfileField
-                icon={<Mail />}
-                label="University email"
-                value="anand.20261BCA0157@presidencyuniversity.in"
-              />
+          <div className="academic-profile-grid">
 
-              <ProfileField
-                icon={<Phone />}
-                label="Phone number"
-                value="+91 7542942011"
-              />
+            <AcademicBox
+              label="YEAR"
+              value="1st"
+            />
 
-              <ProfileField
-                icon={<MapPin />}
-                label="Location"
-                value="Bengaluru, Karnataka"
-              />
-            </div>
-          </section>
+            <AcademicBox
+              label="SEMESTER"
+              value="01"
+            />
 
-          <section className="profile-section">
-            <div className="section-title">
-              <div>
-                <span className="panel-kicker">ACADEMIC DETAILS</span>
-                <h2>Programme information</h2>
-              </div>
-            </div>
+            <AcademicBox
+              label="PROGRAM"
+              value="BCA"
+            />
 
-            <div className="profile-fields">
-              <ProfileField
-                icon={<GraduationCap />}
-                label="Programme"
-                value="B.Tech — BCA in Cyber Security"
-              />
+            <AcademicBox
+              label="DEPARTMENT"
+              value="SOIS"
+            />
 
-              <ProfileField
-                icon={<GraduationCap />}
-                label="Academic year"
-                value="1st Year"
-              />
+          </div>
 
-              <ProfileField
-                icon={<GraduationCap />}
-                label="Current semester"
-                value="Semester 1"
-              />
+          <div className="profile-progress">
 
-              <ProfileField
-                icon={<GraduationCap />}
-                label="Batch"
-                value="2026 — 2029"
-              />
-            </div>
-          </section>
-
-          <section className="profile-section security-section">
-            <div className="section-title">
-              <div>
-                <span className="panel-kicker">SECURITY</span>
-                <h2>Account security</h2>
-              </div>
+            <div className="profile-progress-head">
+              <span>Degree progress</span>
+              <strong>50%</strong>
             </div>
 
-            <div className="security-row">
-              <div className="security-icon">
-                <ShieldCheck size={17} />
-              </div>
-
-              <div>
-                <strong>Password</strong>
-                <p>Last changed recently</p>
-              </div>
-
-              <button>
-                Change password
-                <ChevronRight size={14} />
-              </button>
+            <div className="progress-track">
+              <span style={{ width: "50%" }} />
             </div>
 
-            <div className="security-row">
-              <div className="security-icon">
-                <ShieldCheck size={17} />
-              </div>
+            <p>
+              You're currently in the first year of your undergraduate program.
+            </p>
 
-              <div>
-                <strong>Two-factor authentication</strong>
-                <p>Additional protection for your account</p>
-              </div>
+          </div>
+        </section>
 
-              <span className="security-enabled">
-                Enabled
-              </span>
-            </div>
-          </section>
-        </main>
       </div>
+
+      <section className="panel profile-security">
+
+        <div className="panel-head">
+          <div>
+            <span className="panel-kicker">ACCOUNT SECURITY</span>
+            <h2>Security & access</h2>
+          </div>
+
+          <ShieldCheck size={17} />
+        </div>
+
+        <div className="security-row">
+
+          <div className="security-icon">
+            <ShieldCheck size={15} />
+          </div>
+
+          <div>
+            <strong>University account</strong>
+            <span>
+              Your account is currently active.
+            </span>
+          </div>
+
+          <span className="security-status">
+            ACTIVE
+          </span>
+
+        </div>
+
+        <div className="security-row">
+
+          <div className="security-icon">
+            <Mail size={15} />
+          </div>
+
+          <div>
+            <strong>Email verification</strong>
+            <span>
+              University email verification is enabled.
+            </span>
+          </div>
+
+          <span className="security-status">
+            VERIFIED
+          </span>
+
+        </div>
+
+      </section>
+
     </div>
   );
 }
 
-function ProfileField({ icon, label, value }) {
+function ProfileDetail({ icon, label, value }) {
   return (
-    <div className="profile-field">
-      <div className="profile-field-icon">
+    <div className="profile-detail">
+
+      <div className="profile-detail-icon">
         {icon}
       </div>
 
@@ -187,6 +250,16 @@ function ProfileField({ icon, label, value }) {
         <span>{label}</span>
         <strong>{value}</strong>
       </div>
+
+    </div>
+  );
+}
+
+function AcademicBox({ label, value }) {
+  return (
+    <div className="academic-box">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }

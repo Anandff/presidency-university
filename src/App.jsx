@@ -154,16 +154,28 @@ function App() {
     <ChevronRight size={15} className="nav-arrow"/>
   )}
 </button>
-          <div className="profile-mini">
+          <div
+  className="profile-mini"
+  onClick={() => {
+  setActive("My Profile");
+  setSidebarOpen(false);
+}}
+  role="button"
+  tabIndex={0}
+>
   <div className="avatar">AK</div>
+
   <div className="profile-info">
-    <strong>Anand Kumar</strong>
-    <span>{user.role}</span>
+    <strong>{user?.name || "Anand Kumar Bhargav"}</strong>
+    <span>{user?.role || "Student"}</span>
   </div>
 
   <button
     className="logout-button"
-    onClick={handleLogout}
+    onClick={(e) => {
+      e.stopPropagation();
+      handleLogout();
+    }}
     title="Sign out"
   >
     <ArrowUpRight size={15} />
@@ -179,7 +191,7 @@ function App() {
           <div className="top-left">
             <button className="icon-button menu-button" onClick={() => setSidebarOpen(true)}><Menu size={21}/></button>
             <div className="breadcrumb">
-              <span>Presidency Connect</span>
+              <span>Presidency OS</span>
               <ChevronRight size={14}/>
               <strong>{active}</strong>
             </div>
@@ -218,7 +230,13 @@ function App() {
 ) : active === "Notifications" ? (
   <Notifications />
 ) : active === "My Profile" ? (
-  <Profile />
+  <Profile
+    user={user}
+    onBack={() => {
+      setShowProfile(false);
+      setActive("Home");
+    }}
+  />
 ) : active === "Settings" ? (
   <SettingsPage dark={dark} setDark={setDark} />
 ) : active === "Events" ? (
