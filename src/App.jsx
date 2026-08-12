@@ -13,6 +13,7 @@ import SettingsPage from "./pages/SettingsPage";
 import Events from "./pages/Events";
 import Resources from "./pages/Resources";
 import CampusMap from "./pages/CampusMap";
+import Helpdesk from "./pages/Helpdesk";
 import {
   Bell, CalendarDays, ChevronRight, Clock3, FileText, GraduationCap,
   Home, LayoutDashboard, MapPin, Menu, MessageSquare, Moon, Search,
@@ -245,6 +246,8 @@ function App() {
   <Resources />
 ) : active === "Campus Map" ? (
   <CampusMap />
+) : active === "Helpdesk" ? (
+  <Helpdesk user={user} />
 ) : (
   <>
           <div className="hero">
