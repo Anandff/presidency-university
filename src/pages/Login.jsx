@@ -12,7 +12,8 @@ import {
 const DEMO_USERS = {
   "anand@test.com": { password: "anand123", role: "Student" },
   "faculty@test.com": { password: "password123", role: "Faculty" },
-  "admin@test.com": { password: "password123", role: "Admin" }
+  "badal@test.com": { password: "password123", role: "Admin" },
+  "tarun@test.com": { password: "password123", role: "Admin" }
 };
 
 export default function Login({ onLogin }) {
