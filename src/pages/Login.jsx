@@ -69,11 +69,15 @@ export default function Login({ onLogin }) {
 
     const displayName = generateDisplayName(cleanEmail);
 
-    onLogin({
-      email: cleanEmail,
-      role: user.role,
-      name: displayName
-    });
+    const universityEmail =
+  `${cleanEmail.split("@")[0].toUpperCase()}.20261BCA0157@presidencyuniversity.in`;
+
+onLogin({
+  email: cleanEmail,
+  universityEmail,
+  role: user.role,
+  name: displayName
+});
   }
 
   return (

@@ -253,7 +253,7 @@ function App() {
           <div className="hero">
             <div>
               <div className="eyebrow"><Sparkles size={14}/> STUDENT SPACE</div>
-              <h1>Good morning, Anand <span>👋</span></h1>
+              <h1>Good morning, {user?.name || "Student"} <span>👋</span></h1>
               <p>BCA • Cyber Security <span className="dot">•</span> Semester 1</p>
             </div>
             <button className="ask-button"><Sparkles size={17}/> Ask Presidency</button>

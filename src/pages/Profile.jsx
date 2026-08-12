@@ -51,17 +51,18 @@ export default function Profile({ user, onBack }) {
 
   const profile = {
     name:
-      student?.name ||
-      user?.name ||
-      "Anand Kumar Bhargav",
+  user?.name ||
+  student?.name ||
+  "Student",
 
     studentId:
       student?.student_id ||
       "20261BCA0157",
 
     email:
-      student?.email ||
-      "ANAND.20261BCA0157@presidencyuniversity.in",
+  user?.universityEmail ||
+  student?.email ||
+  "student@presidencyuniversity.in",
 
     phone:
       student?.phone ||
