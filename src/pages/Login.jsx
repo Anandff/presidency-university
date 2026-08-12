@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 const DEMO_USERS = {
-  "anand@a.com": { password: "anand123", role: "Student" },
+  "anand@test.com": { password: "anand123", role: "Student" },
   "faculty@test.com": { password: "password123", role: "Faculty" },
   "admin@test.com": { password: "password123", role: "Admin" }
 };
