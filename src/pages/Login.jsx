@@ -10,10 +10,43 @@ import {
 } from "lucide-react";
 
 const DEMO_USERS = {
-  "anand@test.com": { password: "anand123", role: "Student" },
-  "badal@test.com": { password: "password123", role: "Admin" },
-  "tarun@test.com": { password: "password123", role: "Admin" }
+  "anand@test.com": {
+    password: "anand123",
+    role: "Founder"
+  },
+
+  "badal@test.com": {
+    password: "password123",
+    role: "Admin"
+  },
+
+  "tarun@test.com": {
+    password: "password123",
+    role: "Student"
+  }
 };
+
+function generateDisplayName(email) {
+  const username = email.split("@")[0];
+
+  const cleanedName = username
+    .replace(/[._-]+/g, " ")
+    .replace(/[0-9]+/g, " ")
+    .trim();
+
+  if (!cleanedName) {
+    return "Student";
+  }
+
+  return cleanedName
+    .split(/\s+/)
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+    )
+    .join(" ");
+}
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -25,16 +58,21 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError("");
 
-    const user = DEMO_USERS[email.toLowerCase().trim()];
+    const cleanEmail = email.toLowerCase().trim();
+
+    const user = DEMO_USERS[cleanEmail];
 
     if (!user || user.password !== password) {
       setError("Invalid email or password.");
       return;
     }
 
+    const displayName = generateDisplayName(cleanEmail);
+
     onLogin({
-      email: email.toLowerCase().trim(),
-      role: user.role
+      email: cleanEmail,
+      role: user.role,
+      name: displayName
     });
   }
 
@@ -44,20 +82,30 @@ export default function Login({ onLogin }) {
       <div className="login-decoration decoration-two" />
 
       <div className="login-shell">
+
         <div className="login-brand">
-          <div className="login-logo"><img
-  src="https://e7.pngegg.com/pngimages/286/102/png-clipart-presidency-college-bangalore-presidency-university-bangalore-bangalore-university-p-e-s-institute-of-technology-bangalore-south-campus-school-text-logo.png" height="40" width="40"
-  alt="Presidency OS"
-  className="login-logo-image"
-/></div>
+
+          <div className="login-logo">
+            <img
+              src="https://e7.pngegg.com/pngimages/286/102/png-clipart-presidency-college-bangalore-presidency-university-bangalore-bangalore-university-p-e-s-institute-of-technology-bangalore-south-campus-school-text-logo.png"
+              height="40"
+              width="40"
+              alt="Presidency OS"
+              className="login-logo-image"
+            />
+          </div>
+
           <div>
             <strong>Presidency</strong>
             <span>OS</span>
           </div>
+
         </div>
 
         <div className="login-content">
+
           <div className="login-intro">
+
             <div className="login-badge">
               <Sparkles size={14} />
               DIGITAL CAMPUS
@@ -75,81 +123,150 @@ export default function Login({ onLogin }) {
             </p>
 
             <div className="login-feature">
-              <div><ShieldCheck size={18} /></div>
-              <span>Secure university workspace</span>
+              <div>
+                <ShieldCheck size={18} />
+              </div>
+
+              <span>
+                Secure university workspace
+              </span>
             </div>
+
           </div>
 
           <div className="login-card">
+
             <div className="login-card-head">
+
               <div>
                 <h2>Welcome back</h2>
-                <p>Sign in to your student workspace.</p>
+
+                <p>
+                  Sign in to your student workspace.
+                </p>
               </div>
+
               <div className="login-lock">
                 <LockKeyhole size={18} />
               </div>
+
             </div>
 
             <form onSubmit={handleSubmit}>
-              <label>University email</label>
+
+              <label>
+                University email
+              </label>
+
               <div className="login-input">
+
                 <Mail size={17} />
+
                 <input
                   type="email"
                   placeholder="you@presidencyuniversity.in"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
                   required
                 />
+
               </div>
 
-              <label>Password</label>
+              <label>
+                Password
+              </label>
+
               <div className="login-input">
+
                 <LockKeyhole size={17} />
+
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                   required
                 />
+
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
                 >
-                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                  {showPassword ? (
+                    <EyeOff size={17} />
+                  ) : (
+                    <Eye size={17} />
+                  )}
                 </button>
+
               </div>
 
-              {error && <div className="login-error">{error}</div>}
+              {error && (
+                <div className="login-error">
+                  {error}
+                </div>
+              )}
 
               <div className="login-options">
+
                 <label className="remember">
                   <input type="checkbox" />
-                  <span>Remember me</span>
+                  <span>
+                    Remember me
+                  </span>
                 </label>
-                <button type="button">Forgot password?</button>
+
+                <button type="button">
+                  Forgot password?
+                </button>
+
               </div>
 
-              <button className="login-submit" type="submit">
+              <button
+                className="login-submit"
+                type="submit"
+              >
                 Sign in
                 <ArrowRight size={18} />
               </button>
+
             </form>
 
             <div className="demo-hint">
-              <strong>Development login</strong>
-              <span>Under-Construction</span>
+              <strong>
+                Development login
+              </strong>
+
+              <span>
+                Under-Construction
+              </span>
             </div>
+
           </div>
+
         </div>
 
         <div className="login-footer">
-          <span>Presidency OS</span>
-          <span>Secure digital campus</span>
+          <span>
+            Presidency OS
+          </span>
+
+          <span>
+            Secure digital campus
+          </span>
         </div>
+
       </div>
     </div>
   );
