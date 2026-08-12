@@ -11,7 +11,6 @@ import {
 
 const DEMO_USERS = {
   "anand@test.com": { password: "anand123", role: "Student" },
-  "faculty@test.com": { password: "password123", role: "Faculty" },
   "badal@test.com": { password: "password123", role: "Admin" },
   "tarun@test.com": { password: "password123", role: "Admin" }
 };
@@ -142,7 +141,7 @@ export default function Login({ onLogin }) {
 
             <div className="demo-hint">
               <strong>Development login</strong>
-              <span>student@anand.com / anand123</span>
+              <span>Under-Construction</span>
             </div>
           </div>
         </div>

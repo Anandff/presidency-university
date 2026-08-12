@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   ArrowLeft,
   BadgeCheck,
@@ -12,40 +14,161 @@ import {
   UserRound
 } from "lucide-react";
 
+import { supabase } from "../lib/supabase";
+
 export default function Profile({ user, onBack }) {
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    loadStudentProfile();
+  }, []);
+
+  async function loadStudentProfile() {
+    setLoading(true);
+    setError("");
+
+    const { data, error } = await supabase
+  .from("students")
+  .select("*")
+  .eq("student_id", "20261BCA0157")
+  .maybeSingle();
+
+  console.log("SUPABASE STUDENT:", data);
+  console.log("SUPABASE ERROR:", error);
+
+    if (error) {
+      console.error("Profile error:", error);
+      setError("Unable to load profile from database.");
+      setLoading(false);
+      return;
+    }
+
+    setStudent(data);
+    setLoading(false);
+  }
+
+  const profile = {
+    name:
+      student?.name ||
+      user?.name ||
+      "Anand Kumar Bhargav",
+
+    studentId:
+      student?.student_id ||
+      "20261BCA0157",
+
+    email:
+      student?.email ||
+      "ANAND.20261BCA0157@presidencyuniversity.in",
+
+    phone:
+      student?.phone ||
+      "+91 7542942011",
+
+    department:
+      student?.department ||
+      "SOIS",
+
+    program:
+      student?.program ||
+      "BCA in Cyber Security",
+
+    year:
+      student?.year ||
+      1,
+
+    semester:
+      student?.semester ||
+      1,
+
+    section:
+      student?.section ||
+      "A",
+
+    campus:
+      "Presidency University"
+  };
+
+  const yearText =
+    profile.year === 1
+      ? "1st Year"
+      : profile.year === 2
+      ? "2nd Year"
+      : profile.year === 3
+      ? "3rd Year"
+      : `${profile.year}th Year`;
+
+  const semesterText = String(profile.semester).padStart(2, "0");
+
   return (
     <div className="page-content profile-page">
 
       <div className="page-heading">
         <div>
-          <span className="panel-kicker">STUDENT ACCOUNT</span>
+          <span className="panel-kicker">
+            STUDENT ACCOUNT
+          </span>
+
           <h1>My Profile</h1>
+
           <p>
             Manage your personal information and university profile.
           </p>
         </div>
 
-        <button className="profile-back-button" onClick={onBack}>
+        <button
+          className="profile-back-button"
+          onClick={onBack}
+        >
           <ArrowLeft size={14} />
           Back to dashboard
         </button>
       </div>
 
+      {loading && (
+        <div className="panel" style={{ padding: "15px" }}>
+          Loading profile...
+        </div>
+      )}
+
+      {error && (
+        <div
+          className="panel"
+          style={{
+            padding: "15px",
+            marginBottom: "15px"
+          }}
+        >
+          {error}
+        </div>
+      )}
+
       <section className="profile-hero">
+
         <div className="profile-avatar-large">
-          AK
+          {profile.name
+            .split(" ")
+            .map((word) => word[0])
+            .slice(0, 2)
+            .join("")
+            .toUpperCase()}
         </div>
 
         <div className="profile-identity">
+
           <div className="profile-name-row">
+
             <h2>
-              {user?.name || "Anand Kumar Bhargav"}
+              {profile.name}
             </h2>
 
             <span className="verified-badge">
               <BadgeCheck size={12} />
               Verified
             </span>
+
           </div>
 
           <p>
@@ -53,6 +176,7 @@ export default function Profile({ user, onBack }) {
           </p>
 
           <div className="profile-meta">
+
             <span>
               <GraduationCap size={13} />
               B.Tech
@@ -60,32 +184,48 @@ export default function Profile({ user, onBack }) {
 
             <span>
               <BookOpen size={13} />
-              BCA in Cyber Security
+              {profile.program}
             </span>
 
             <span>
               <CalendarDays size={13} />
-              1st Year
+              {yearText}
             </span>
+
           </div>
+
         </div>
 
-        <button className="profile-edit-button">
+        <button
+          className="profile-edit-button"
+          onClick={() =>
+            alert(
+              "Profile editing will be enabled in the next backend update."
+            )
+          }
+        >
           <Edit3 size={13} />
           Edit profile
         </button>
+
       </section>
 
       <div className="profile-grid">
 
         <section className="panel profile-panel">
+
           <div className="panel-head">
+
             <div>
-              <span className="panel-kicker">PERSONAL INFORMATION</span>
+              <span className="panel-kicker">
+                PERSONAL INFORMATION
+              </span>
+
               <h2>Basic details</h2>
             </div>
 
             <UserRound size={17} />
+
           </div>
 
           <div className="profile-details">
@@ -93,62 +233,69 @@ export default function Profile({ user, onBack }) {
             <ProfileDetail
               icon={<UserRound size={14} />}
               label="Full name"
-              value={user?.name || "Anand Kumar Bhargav"}
+              value={profile.name}
             />
 
             <ProfileDetail
               icon={<BadgeCheck size={14} />}
               label="University ID"
-              value="20261BCA0157"
+              value={profile.studentId}
             />
 
             <ProfileDetail
               icon={<Mail size={14} />}
               label="University email"
-              value="ANAND.20261BCA0157@presidencyuniversity.in"
+              value={profile.email}
             />
 
             <ProfileDetail
               icon={<Phone size={14} />}
               label="Phone number"
-              value="+91 7542942011"
+              value={profile.phone}
             />
 
             <ProfileDetail
               icon={<MapPin size={14} />}
               label="Campus"
-              value="Presidency University"
+              value={profile.campus}
             />
 
             <ProfileDetail
               icon={<GraduationCap size={14} />}
               label="Program"
-              value="BCA in Cyber Security"
+              value={profile.program}
             />
 
           </div>
+
         </section>
 
         <section className="panel profile-panel">
+
           <div className="panel-head">
+
             <div>
-              <span className="panel-kicker">ACADEMIC INFORMATION</span>
+              <span className="panel-kicker">
+                ACADEMIC INFORMATION
+              </span>
+
               <h2>Academic overview</h2>
             </div>
 
             <GraduationCap size={17} />
+
           </div>
 
           <div className="academic-profile-grid">
 
             <AcademicBox
               label="YEAR"
-              value="1st"
+              value={profile.year}
             />
 
             <AcademicBox
               label="SEMESTER"
-              value="01"
+              value={semesterText}
             />
 
             <AcademicBox
@@ -158,7 +305,7 @@ export default function Profile({ user, onBack }) {
 
             <AcademicBox
               label="DEPARTMENT"
-              value="SOIS"
+              value={profile.department}
             />
 
           </div>
@@ -166,8 +313,11 @@ export default function Profile({ user, onBack }) {
           <div className="profile-progress">
 
             <div className="profile-progress-head">
+
               <span>Degree progress</span>
+
               <strong>50%</strong>
+
             </div>
 
             <div className="progress-track">
@@ -175,10 +325,12 @@ export default function Profile({ user, onBack }) {
             </div>
 
             <p>
-              You're currently in the first year of your undergraduate program.
+              You're currently in the first year of your
+              undergraduate program.
             </p>
 
           </div>
+
         </section>
 
       </div>
@@ -186,12 +338,17 @@ export default function Profile({ user, onBack }) {
       <section className="panel profile-security">
 
         <div className="panel-head">
+
           <div>
-            <span className="panel-kicker">ACCOUNT SECURITY</span>
+            <span className="panel-kicker">
+              ACCOUNT SECURITY
+            </span>
+
             <h2>Security & access</h2>
           </div>
 
           <ShieldCheck size={17} />
+
         </div>
 
         <div className="security-row">
@@ -201,7 +358,10 @@ export default function Profile({ user, onBack }) {
           </div>
 
           <div>
-            <strong>University account</strong>
+            <strong>
+              University account
+            </strong>
+
             <span>
               Your account is currently active.
             </span>
@@ -220,7 +380,10 @@ export default function Profile({ user, onBack }) {
           </div>
 
           <div>
-            <strong>Email verification</strong>
+            <strong>
+              Email verification
+            </strong>
+
             <span>
               University email verification is enabled.
             </span>
@@ -238,7 +401,11 @@ export default function Profile({ user, onBack }) {
   );
 }
 
-function ProfileDetail({ icon, label, value }) {
+function ProfileDetail({
+  icon,
+  label,
+  value
+}) {
   return (
     <div className="profile-detail">
 
@@ -255,11 +422,17 @@ function ProfileDetail({ icon, label, value }) {
   );
 }
 
-function AcademicBox({ label, value }) {
+function AcademicBox({
+  label,
+  value
+}) {
   return (
     <div className="academic-box">
+
       <span>{label}</span>
+
       <strong>{value}</strong>
+
     </div>
   );
 }
