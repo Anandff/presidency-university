@@ -26,17 +26,31 @@ export default function Profile({ user, onBack }) {
   }, []);
 
   async function loadStudentProfile() {
-    setLoading(true);
-    setError("");
+  setLoading(true);
+  setError("");
+
+  try {
+    const {
+      data: { user: authUser },
+      error: authError
+    } = await supabase.auth.getUser();
+
+    if (authError || !authUser) {
+      console.error("Auth user error:", authError);
+      setError("Unable to identify your account.");
+      setLoading(false);
+      return;
+    }
 
     const { data, error } = await supabase
-  .from("students")
-  .select("*")
-  .eq("student_id", "20261BCA0157")
-  .maybeSingle();
+      .from("students")
+      .select("*")
+      .eq("auth_user_id", authUser.id)
+      .maybeSingle();
 
-  console.log("SUPABASE STUDENT:", data);
-  console.log("SUPABASE ERROR:", error);
+    console.log("LOGGED IN AUTH USER:", authUser);
+    console.log("STUDENT PROFILE:", data);
+    console.log("PROFILE ERROR:", error);
 
     if (error) {
       console.error("Profile error:", error);
@@ -45,52 +59,65 @@ export default function Profile({ user, onBack }) {
       return;
     }
 
+    if (!data) {
+      setError("Student profile not found.");
+      setLoading(false);
+      return;
+    }
+
     setStudent(data);
     setLoading(false);
+
+  } catch (err) {
+    console.error("Unexpected profile error:", err);
+    setError("Something went wrong while loading your profile.");
+    setLoading(false);
   }
+}
 
   const profile = {
-    name:
-  user?.name ||
-  student?.name ||
-  "Student",
+  name:
+    student?.name ||
+    user?.name ||
+    "Student",
 
-    studentId:
-      student?.student_id ||
-      "20261BCA0157",
+  studentId:
+    student?.student_id ||
+    user?.studentId ||
+    "Not available",
 
-    email:
-  user?.universityEmail ||
-  student?.email ||
-  "student@presidencyuniversity.in",
+  email:
+    student?.email ||
+    user?.universityEmail ||
+    "Not available",
 
-    phone:
-      student?.phone ||
-      "+91 7542942011",
+  phone:
+    student?.phone ||
+    "Not available",
 
-    department:
-      student?.department ||
-      "SOIS",
+  department:
+    student?.department ||
+    "Not available",
 
-    program:
-      student?.program ||
-      "BCA in Cyber Security",
+  program:
+    student?.program ||
+    "Not available",
 
-    year:
-      student?.year ||
-      1,
+  year:
+    student?.year ||
+    1,
 
-    semester:
-      student?.semester ||
-      1,
+  semester:
+    student?.semester ||
+    1,
 
-    section:
-      student?.section ||
-      "A",
+  section:
+    student?.section ||
+    "Not available",
 
-    campus:
-      "Presidency University"
-  };
+  campus:
+    "Presidency University"
+};
 
   const yearText =
     profile.year === 1
@@ -149,13 +176,13 @@ export default function Profile({ user, onBack }) {
       <section className="profile-hero">
 
         <div className="profile-avatar-large">
-          {profile.name
-            .split(" ")
-            .map((word) => word[0])
-            .slice(0, 2)
-            .join("")
-            .toUpperCase()}
-        </div>
+  {(student?.name || user?.name || "Student")
+    .split(" ")
+    .map(word => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()}
+</div>
 
         <div className="profile-identity">
 
@@ -179,9 +206,9 @@ export default function Profile({ user, onBack }) {
           <div className="profile-meta">
 
             <span>
-              <GraduationCap size={13} />
-              B.Tech
-            </span>
+  <GraduationCap size={13} />
+  {profile.program}
+</span>
 
             <span>
               <BookOpen size={13} />
@@ -300,9 +327,9 @@ export default function Profile({ user, onBack }) {
             />
 
             <AcademicBox
-              label="PROGRAM"
-              value="BCA"
-            />
+  label="PROGRAM"
+  value={profile.program}
+/>
 
             <AcademicBox
               label="DEPARTMENT"
@@ -326,9 +353,9 @@ export default function Profile({ user, onBack }) {
             </div>
 
             <p>
-              You're currently in the first year of your
-              undergraduate program.
-            </p>
+  You're currently in {yearText.toLowerCase()} of your
+  undergraduate program.
+</p>
 
           </div>
 

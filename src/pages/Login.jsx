@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "../lib/supabase";
 import {
   ArrowRight,
   Eye,
@@ -9,76 +10,87 @@ import {
   Sparkles
 } from "lucide-react";
 
-const DEMO_USERS = {
-  "anand@test.com": {
-    password: "anand123",
-    role: "Founder"
-  },
-
-  "badal@test.com": {
-    password: "password123",
-    role: "Admin"
-  },
-
-  "tarun@test.com": {
-    password: "password123",
-    role: "Student"
-  }
-};
-
-function generateDisplayName(email) {
-  const username = email.split("@")[0];
-
-  const cleanedName = username
-    .replace(/[._-]+/g, " ")
-    .replace(/[0-9]+/g, " ")
-    .trim();
-
-  if (!cleanedName) {
-    return "Student";
-  }
-
-  return cleanedName
-    .split(/\s+/)
-    .map(
-      (word) =>
-        word.charAt(0).toUpperCase() +
-        word.slice(1).toLowerCase()
-    )
-    .join(" ");
-}
-
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
+  async function handleSubmit(e) {
+  e.preventDefault();
+  setError("");
 
-    const cleanEmail = email.toLowerCase().trim();
+  const cleanEmail = email.toLowerCase().trim();
 
-    const user = DEMO_USERS[cleanEmail];
+  try {
+    const { data: authData, error: authError } =
+      await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password: password
+      });
 
-    if (!user || user.password !== password) {
+    if (authError) {
+      console.error("Login error:", authError);
       setError("Invalid email or password.");
       return;
     }
 
-    const displayName = generateDisplayName(cleanEmail);
+    const authUser = authData.user;
 
-    const universityEmail =
-  `${cleanEmail.split("@")[0].toUpperCase()}.20261BCA0157@presidencyuniversity.in`;
+    if (!authUser) {
+      setError("Unable to identify your account.");
+      return;
+    }
 
-onLogin({
-  email: cleanEmail,
-  universityEmail,
-  role: user.role,
-  name: displayName
-});
+    const { data: student, error: studentError } =
+      await supabase
+        .from("students")
+        .select("*")
+        .eq("auth_user_id", authUser.id)
+        .maybeSingle();
+
+    if (studentError) {
+      console.error(
+        "Student lookup error:",
+        studentError
+      );
+
+      setError(
+        "Unable to load your university profile."
+      );
+
+      return;
+    }
+
+    if (!student) {
+      setError(
+        "Your account is not linked to a university student profile."
+      );
+
+      await supabase.auth.signOut();
+
+      return;
+    }
+
+    onLogin({
+      email: cleanEmail,
+      universityEmail: student.email,
+      role: "Student",
+      name: student.name,
+      studentId: student.student_id
+    });
+
+  } catch (err) {
+    console.error(
+      "Unexpected login error:",
+      err
+    );
+
+    setError(
+      "Something went wrong. Please try again."
+    );
   }
+}
 
   return (
     <div className="login-page">
