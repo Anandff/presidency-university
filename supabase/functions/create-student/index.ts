@@ -1,16 +1,32 @@
 // @ts-nocheck
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods":
+    "POST, OPTIONS"
+};
+
 Deno.serve(async (req) => {
   try {
+    // Handle browser CORS preflight request
+    if (req.method === "OPTIONS") {
+      return new Response("ok", {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
     if (req.method !== "POST") {
       return new Response(
         JSON.stringify({ error: "Method not allowed" }),
         {
           status: 405,
           headers: {
-            "Content-Type": "application/json"
-          }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
         }
       );
     }
@@ -44,8 +60,9 @@ Deno.serve(async (req) => {
         {
           status: 400,
           headers: {
-            "Content-Type": "application/json"
-          }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
         }
       );
     }
@@ -61,16 +78,81 @@ Deno.serve(async (req) => {
         {
           status: 500,
           headers: {
-            "Content-Type": "application/json"
-          }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
         }
       );
     }
 
     const adminClient = createClient(
       supabaseUrl,
-      serviceRoleKey
+      serviceRoleKey,
+      {
+        global: {
+          headers: {
+            Authorization:
+            req.headers.get("Authorization") || ""
+          }
+        }
+      }
     );
+    const {
+      data: { user: currentUser },
+      error: usererror
+    } = await userClient.auth.getUser();
+    if (usererror || !currentUser) {
+      return new Response(
+        JSON.stringify({
+          error: "Authentication required."
+        }),
+        {
+          status: 401,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "appliaction/json"
+          }
+        }
+      );
+    }
+const { data: adminRecord, error: adminError } =
+  await adminClient
+    .from("admins")
+    .select("auth_user_id")
+    .eq("auth_user_id", currentUser.id)
+    .maybeSingle();
+
+if (adminError) {
+  console.error("Admin verification error:", adminError);
+
+  return new Response(
+    JSON.stringify({
+      error: "Unable to verify administrator access."
+    }),
+    {
+      status: 500,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+}
+
+if (!adminRecord) {
+  return new Response(
+    JSON.stringify({
+      error: "Administrator access required."
+    }),
+    {
+      status: 403,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+}
 
     // Create Supabase Auth account
     const {
@@ -90,8 +172,9 @@ Deno.serve(async (req) => {
         {
           status: 400,
           headers: {
-            "Content-Type": "application/json"
-          }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
         }
       );
     }
@@ -130,8 +213,9 @@ Deno.serve(async (req) => {
         {
           status: 400,
           headers: {
-            "Content-Type": "application/json"
-          }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
         }
       );
     }
@@ -145,8 +229,9 @@ Deno.serve(async (req) => {
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json"
-        }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
       }
     );
 
@@ -160,8 +245,9 @@ Deno.serve(async (req) => {
       {
         status: 500,
         headers: {
-          "Content-Type": "application/json"
-        }
+  ...corsHeaders,
+  "Content-Type": "application/json"
+}
       }
     );
   }

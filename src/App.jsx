@@ -14,6 +14,22 @@ import Events from "./pages/Events";
 import Resources from "./pages/Resources";
 import CampusMap from "./pages/CampusMap";
 import Helpdesk from "./pages/Helpdesk";
+import AddStudent from "./pages/AddStudent";
+import { supabase } from "./lib/supabase";
+function getInitials(name) {
+  if (!name) return "ST";
+
+  const words = name.trim().split(/\s+/);
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return (
+    words[0][0] +
+    words[words.length - 1][0]
+  ).toUpperCase();
+}
 import {
   Bell, CalendarDays, ChevronRight, Clock3, FileText, GraduationCap,
   Home, LayoutDashboard, MapPin, Menu, MessageSquare, Moon, Search,
@@ -54,6 +70,12 @@ const navGroups = [
     ]
   },
   {
+  label: "Administration",
+  items: [
+    { label: "Add Student", icon: UserRound }
+  ]
+},
+  {
   label: "Account",
   items: [
     { label: "My Profile", icon: UserRound }
@@ -84,15 +106,63 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dark, setDark] = useState(true);
   const [search, setSearch] = useState("");
-    function handleLogin(userData) {
-    localStorage.setItem("presidency_user", JSON.stringify(userData));
-    setUser(userData);
+    async function handleLogin(userData) {
+  try {
+    const { data: { user: authUser } } =
+      await supabase.auth.getUser();
+
+    if (!authUser) {
+      setUser(userData);
+      return;
+    }
+
+    const { data: adminRecord, error } = await supabase
+      .from("admins")
+      .select("auth_user_id, email")
+      .eq("auth_user_id", authUser.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Admin check error:", error);
+    }
+
+    const updatedUser = {
+      ...userData,
+      auth_user_id: authUser.id,
+      isAdmin: !!adminRecord
+    };
+
+    localStorage.setItem(
+      "presidency_user",
+      JSON.stringify(updatedUser)
+    );
+
+    setUser(updatedUser);
+    setActive("Home");
+    
+
+  } catch (error) {
+    console.error("Login role check error:", error);
+
+    const updatedUser = {
+      ...userData,
+      isAdmin: false
+    };
+
+    localStorage.setItem(
+      "presidency_user",
+      JSON.stringify(updatedUser)
+    );
+
+    setUser(updatedUser);
   }
+}
 
   function handleLogout() {
-    localStorage.removeItem("presidency_user");
-    setUser(null);
-  }
+  localStorage.removeItem("presidency_user");
+  setUser(null);
+  setActive("Home");
+}
 
   if (!user) {
     return <Login onLogin={handleLogin} />;
@@ -120,7 +190,12 @@ function App() {
         </div>
 
         <nav>
-          {navGroups.map(group => (
+          {navGroups
+  .filter(
+    (group) =>
+      group.label !== "Administration" || user?.isAdmin === true
+  )
+  .map((group) => (
             <div className="nav-group" key={group.label}>
               <div className="nav-label">{group.label}</div>
               {group.items.map(item => {
@@ -164,7 +239,9 @@ function App() {
   role="button"
   tabIndex={0}
 >
-  <div className="avatar">AK</div>
+  <div className="avatar">
+  {getInitials(user?.name)}
+</div>
 
   <div className="profile-info">
     <strong>{user?.name || "Anand Kumar Bhargav"}</strong>
@@ -209,7 +286,9 @@ function App() {
             </button>
             <button className="notification"onClick={() => setActive("Notifications")}
 ><Bell size={19}/><i /></button>
-            <div className="top-avatar">AK</div>
+            <div className="top-avatar">
+  {getInitials(user?.name)}
+</div>
           </div>
         </header>
 
@@ -248,6 +327,10 @@ function App() {
   <CampusMap />
 ) : active === "Helpdesk" ? (
   <Helpdesk user={user} />
+) : active === "Add Student" && user?.isAdmin === true ? (
+  <AddStudent
+    onBack={() => setActive("Home")}
+  />
 ) : (
   <>
           <div className="hero">

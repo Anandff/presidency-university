@@ -23,6 +23,7 @@ export default function Login({ onLogin }) {
   const cleanEmail = email.toLowerCase().trim();
 
   try {
+    // 1. Authenticate with Supabase
     const { data: authData, error: authError } =
       await supabase.auth.signInWithPassword({
         email: cleanEmail,
@@ -42,6 +43,45 @@ export default function Login({ onLogin }) {
       return;
     }
 
+    // 2. FIRST check whether this is an Admin
+    const { data: admin, error: adminError } =
+      await supabase
+        .from("admins")
+        .select("auth_user_id, email")
+        .eq("auth_user_id", authUser.id)
+        .maybeSingle();
+
+    if (adminError) {
+      console.error("Admin lookup error:", adminError);
+
+      setError(
+        "Unable to verify your account permissions."
+      );
+
+      await supabase.auth.signOut();
+      return;
+    }
+
+    // 3. If admin exists, allow Admin login
+    if (admin) {
+      console.log("AUTH USER ID:", authUser.id);
+console.log("ADMIN RECORD:", admin);
+console.log("ADMIN ERROR:", adminError);
+
+      onLogin({
+        email: cleanEmail,
+        universityEmail: admin.email,
+        role: "Admin",
+        name: "Administrator",
+        studentId: null,
+        isAdmin: true,
+        auth_user_id: authUser.id
+      });
+
+      return;
+    }
+
+    // 4. Otherwise, check Student profile
     const { data: student, error: studentError } =
       await supabase
         .from("students")
@@ -59,25 +99,29 @@ export default function Login({ onLogin }) {
         "Unable to load your university profile."
       );
 
+      await supabase.auth.signOut();
       return;
     }
 
+    // 5. Auth account exists but isn't Admin or Student
     if (!student) {
       setError(
-        "Your account is not linked to a university student profile."
+        "Your account is not linked to a university profile."
       );
 
       await supabase.auth.signOut();
-
       return;
     }
 
+    // 6. Normal Student login
     onLogin({
       email: cleanEmail,
       universityEmail: student.email,
       role: "Student",
       name: student.name,
-      studentId: student.student_id
+      studentId: student.student_id,
+      isAdmin: false,
+      auth_user_id: authUser.id
     });
 
   } catch (err) {
